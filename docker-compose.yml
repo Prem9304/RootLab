@@ -1,0 +1,29 @@
+# docker-compose.yml
+version: '3.8'
+
+services:
+  rootlab-app:
+    build: .
+    container_name: rootlab-app
+    ports:
+      - "3000:3000"
+    volumes:
+      - //var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+    depends_on:
+      - kali-linux
+    restart: always
+
+  kali-linux:
+    build:
+      context: .
+      dockerfile: kali.Dockerfile
+    container_name: kali-default
+    privileged: true
+    ports:
+      - "4444:4444"
+      - "8080:8080"
+    tty: true
+    stdin_open: true
+    restart: always
